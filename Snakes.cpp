@@ -1,6 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -9,6 +10,8 @@ const int height = 20;
 const int width = 40;
 int x, y, fruitX, fruitY, score;
 int tailX[100], tailY[100], nTail;
+char snake = 'o';
+char fruit = 'M';
 
 enum eDirection{
 	STOP = 0, UP, DOWN, LEFT, RIGHT
@@ -38,17 +41,17 @@ void Draw(){
 				cout << "#";
 			}
 			else if (i == y && j == x){
-				cout << "o";
+				cout << snake;
 			}
 			else if (i == fruitY && j == fruitX){
-				cout << "M";
+				cout << fruit;
 			}
 			else {
 				bool print = false;
 				
 				for(int k = 0; k < nTail; k++){
 					if (i == tailY[k] && j == tailX[k]){
-						cout << "o";
+						cout << snake;
 						print = true;
 					}
 				}
@@ -142,14 +145,59 @@ void Logic(){
 	}
 }
 
+bool menu(){
+	char opt = '2';
+	bool repeat = true;
+	
+	choice:
+	while (repeat){
+		cout << "SNAKES\n" << endl;
+		cout << "1. Start" << endl;
+		cout << "2. Set skins" << endl;
+		cout << "3. Exit\n" << endl;
+		
+		cout << "Enter choice : ";
+		cin >> opt;
+		system("CLS");
+		
+		if (opt == '1'){
+			repeat = false;
+			return true;
+		}
+		else if (opt == '2'){
+			cout << "Edit skin\n" << endl;
+			cout << "Enter snake's skin" << endl;
+			cin >> snake;
+			cout << "Enter fruit's skin" << endl;
+			cin >> fruit;
+			
+			cout << "\nSkin Updated!";
+			_kbhit();
+			system("CLS");
+			goto choice;
+		}
+		else if (opt == '3'){
+			repeat = false;
+			system("CLS");
+			cout << "Good Bye!!!";
+			_kbhit();
+			abort();
+		}
+	}
+}
+
 int main() {
+	int start = menu();
 	
-	Setup();
+	if (start){
+		Setup();
 	
-	while (!gameOver){
-		Draw();
-		Input();
-		Logic();
-	}	
+		while (!gameOver){
+			Draw();
+			Input();
+			Logic();
+		}
+	}
+	
 	return 0;
 }
